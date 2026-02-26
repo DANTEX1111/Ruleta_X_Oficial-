@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta Sí/No</title>
+    <style>
+        :root {
+    --wheel-size: 240px;
+    --wheel-border: 8px;
+    --color-lose: #0084ff; 
+    --color-win: #ff0000; 
+    --text-color: #ffffff;
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* ============================= */
+/* GOOGLE FONT */
+/* ============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* ============================= */
+/* RESET GLOBAL */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-family);
+    color: var(--text-color);
+}
+
+/* ============================= */
+/* VIDEO DE FONDO RESPONSIVE REAL */
+/* ============================= */
+
+.video-container {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh; /* 🔥 SOLUCION REAL PARA MOVILES */
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ============================= */
+/* CONTENEDOR PRINCIPAL */
+/* ============================= */
+
+.container {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* ============================= */
+/* TITULO */
+/* ============================= */
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+/* ============================= */
+/* RULETA */
+/* ============================= */
+
+.wheel-container {
+    position: relative;
+    width: var(--wheel-size);
+    height: var(--wheel-size);
+    margin: 20px auto;
+}
+
+.ruleta {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: var(--wheel-border) solid #fff;
+    background: conic-gradient(
+        var(--color-win) 0deg 180deg,
+        var(--color-lose) 180deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 3s cubic-bezier(0.1, 0, 0, 1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+/* SEGMENTOS */
+
+.segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.segment.ganaste {
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+}
+
+.segment.perdiste {
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+}
+
+/* FLECHA */
+
+.pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+}
+
+/* RESULTADO */
+
+.resultado {
+    margin-top: 20px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    animation: fadein 0.5s ease;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ============================= */
+/* BOTÓN */
+/* ============================= */
+
+button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #0066cc;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+}
+
+button:disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* ============================= */
+/* REDES SOCIALES */
+/* ============================= */
+
+.social {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.social img {
+    width: 45px;
+    height: 45px;
+}
+
+/* ============================= */
+/* MODAL */
+/* ============================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 85%;
+    max-width: 320px;
+    text-align: center;
+    color: #333;
+}
+
+#modal-close {
+    margin-top: 15px;
+    background: #0066cc;
+    color: #fff;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    :root {
+        --wheel-size: 200px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .resultado {
+        font-size: 1.4rem;
+    }
+}
+
+/* ============================= */
+/* EXTRA: IMAGEN EN VEZ DE VIDEO EN MOVIL */
+/* ============================= */
+
+@media (max-width: 7608px) {
+    .video-container video {
+        display: none;
+    }
+
+    .video-container {
+        background: url("img/concierto.jpeg") center / cover no-repeat;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- VIDEO DE FONDO -->
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="video/concierto.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container">
+        <h1>Ruleta de Decisión</h1>
+
+        <div class="wheel-container">
+            <div id="ruleta" class="ruleta">
+                <div class="segment ganaste">Ganaste</div>
+                <div class="segment perdiste">Perdiste</div>
+            </div>
+            <div class="pointer">▼</div>
+        </div>
+
+        <div id="resultado" class="resultado"></div>
+
+        <!-- MODAL -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <p id="modal-text"></p>
+                <button id="modal-close">Aceptar</button>
+            </div>
+        </div>
+
+        <button id="girar">Girar</button>
+
+        <!-- REDES SOCIALES -->
+        <div class="social">
+            <a href="https://wa.me/573122180804" target="_blank">
+                <img src="img/WhatsApp.PNG" alt="WhatsApp">
+            </a>
+
+            <a href="https://www.facebook.com/share/1Aic12oZut/?mibextid=wwXIfr" target="_blank">
+                <img src="img/Facebook.PNG" alt="Facebook">
+            </a>
+
+            <a href="https://www.instagram.com/laxclub_?igsh=MXJ1dHJqa2gybW14Mw==" target="_blank">
+                <img src="img/Instagram-Icon.png" alt="Instagram">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const opciones = [
+    { texto: 'Ganaste', alerta: '¡Obtuviste una boleta!' },
+    { texto: 'Perdiste', alerta: 'La proxima' }
+];
+
+const ruletaElement = document.getElementById('ruleta');
+const resultadoElement = document.getElementById('resultado');
+const botonGirar = document.getElementById('girar');
+
+// control para evitar múltiples giros simultáneos
+let girando = false;
+
+// obtener colores desde variables CSS para reutilizar en JS
+const styles = getComputedStyle(document.documentElement);
+const winColor = styles.getPropertyValue('--color-lose').trim();
+const loseColor = styles.getPropertyValue('--color-win').trim();
+
+
+
+let currentRotation = 0; 
+
+function girarRuleta() {
+    if (girando) return;
+    
+    girando = true;
+    botonGirar.disabled = true;
+    resultadoElement.textContent = '';
+
+    // 1. Configuramos 10 vueltas para que sea muy veloz en 3 segundos
+    const vueltas = 10; 
+    const gradosExtra = Math.floor(Math.random() * 360);
+    
+    // 2. Sumamos al valor actual para giro horario continuo
+    currentRotation += (vueltas * 360) + gradosExtra;
+    
+    // Aplicamos el giro visual
+    ruletaElement.style.transform = `rotate(${currentRotation}deg) `;
+
+    setTimeout(() => {
+        // 3. LÓGICA DE DETECCIÓN PRECISA:
+        // El puntero está arriba (0°). Al girar la ruleta a la derecha (horario),
+        // necesitamos saber qué parte del círculo aterrizó en las "12 en punto".
+        const gradosEfectivos = (360 - (currentRotation % 360)) % 360;
+
+        // Según tu CSS: Azul (Win) es de 0 a 180, Rojo (Lose) es de 180 a 360
+        const indice = (gradosEfectivos < 180) ? 1 : 0;
+        
+        const seleccion = opciones[indice];
+        resultadoElement.textContent = seleccion.texto;
+        resultadoElement.style.color = (indice === 0) ? winColor : loseColor;
+        
+        showModal(seleccion.alerta);
+        
+        girando = false;
+        botonGirar.disabled = false;
+    }, 3000); // 3 segundos exactos
+}
+
+// modal control
+const modal = document.getElementById('modal');
+const modalText = document.getElementById('modal-text');
+const modalClose = document.getElementById('modal-close');
+
+function showModal(text) {
+    modalText.textContent = text;
+    modal.style.display = 'flex';
+}
+
+modalClose.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// cerrar modal al hacer clic afuera
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+botonGirar.addEventListener('click', girarRuleta);
+
+    </script>
+</body>
+</html>
