@@ -189,7 +189,7 @@
         const btnGirar = document.getElementById('btn-girar');
         const textoDiv = document.getElementById('resultado-texto');
 
-        const opciones = [" boletas 2", "Perdiste", "boletas 4", "Perdiste", "boletas 6", "Perdiste", "boletas 8", "Perdiste", "boletas 10","Perdiste"];
+        const opciones = [" Ganaste", "Perdiste", "Ganaste", "Perdiste", "Ganaste", "Perdiste", "Ganaste", "Perdiste", "Ganaste","Perdiste"];
         const colores = ["#3498db", "#e74c3c", "#3498db", "#e74c3c", "#3498db", "#e74c3c", "#3498db", "#e74c3c", "#3498db", "#e74c3c"];
         
         let anguloActual = 0;
@@ -253,7 +253,7 @@
             const tit = document.getElementById('modal-titulo');
 
             // CORRECCIÓN AQUÍ: Ahora busca "Ganaste" correctamente
-            if(res.includes("boletas")) {
+            if(res.includes("Ganaste")) {
                 tit.innerText = "¡GANASTE!";
                 msg.innerText = res;
                 msg.style.color = "#27ae60";
